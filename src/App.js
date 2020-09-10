@@ -31,12 +31,22 @@ function App() {
     let date = d.getDate();
     let month = months[d.getMonth()];
     let year = d.getFullYear();
-
-    return `${day} ${date} ${month} ${year}`
+    return `${day} ${date} ${month} ${year}`;
 
   }
+  const currentDate = (offset) => {
+
+    const date = new Date();
+    const localTime = date.getTime();
+    const localOffset = date.getTimezoneOffset() * 60000;
+    const utc = localTime + localOffset;
+    const newDateTime = utc + (1000 * offset);
+    const convertedDateTime = new Date(newDateTime);
+
+    return dateBuilder(convertedDateTime);
+  }
   const description = (des) => {
-    const take = des.slice(0,1).toUpperCase() + des.slice(1);
+    const take = des.slice(0, 1).toUpperCase() + des.slice(1);
     return `${take}`;
   }
   return (
@@ -54,7 +64,7 @@ function App() {
           {(typeof weather.main != "undefined") ? (<div>
             <div className="location-box">
               <div className="location">{weather.name}, {weather.sys.country}</div>
-              <div className="date">{dateBuilder(new Date())}</div>
+              <div className="date">{currentDate(weather.timezone)}</div>
             </div>
             <div className="weather-box">
               <div className="temp">
